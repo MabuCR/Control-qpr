@@ -1,0 +1,8 @@
+# Datos sensibles: nombres y numeros de gafete de asociados, no van al repo.
+data/*.xlsx
+data/*.db
+
+# Venv y caches de Python
+.venv/
+__pycache__/
+*.pyc

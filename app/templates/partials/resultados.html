@@ -1,0 +1,36 @@
+{% if not q %}
+<p class="text-slate-400 text-sm text-center mt-8">Escribe algo arriba para buscar.</p>
+{% elif not resultados %}
+<p class="text-slate-400 text-sm text-center mt-8">Sin resultados para "{{ q }}".</p>
+{% else %}
+<div class="space-y-3">
+    {% for item in resultados %}
+    {% set fila = item.fila %}
+    <div class="bg-white rounded-xl shadow p-4 border-l-4 border-blue-600">
+        <div class="flex items-center justify-between">
+            <h2 class="font-bold text-slate-800">{{ fila.nombre }}</h2>
+            <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full">
+                Estacion {{ fila.estacion }}
+            </span>
+        </div>
+        <p class="text-sm text-slate-500 mt-1">
+            Control:
+            <span class="font-mono font-semibold text-slate-700">
+                {{ fila.control if fila.control else "sin codigo" }}
+            </span>
+        </p>
+
+        {% if item.companeros %}
+        <div class="mt-3 pt-3 border-t border-slate-100">
+            <p class="text-xs text-slate-400 mb-1">Comparte estacion con:</p>
+            <ul class="text-sm text-slate-600 space-y-0.5">
+                {% for c in item.companeros %}
+                <li>{{ c.nombre }} -- control {{ c.control if c.control else "sin codigo" }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}

@@ -1,0 +1,23 @@
+<div class="bg-white rounded-xl shadow p-3 mb-4">
+    <h2 class="text-sm font-semibold text-slate-700 mb-2">Mueble de radios</h2>
+    <div class="grid grid-cols-4 gap-2">
+        {% for n in rango_estaciones %}
+        {% set ocupantes = mueble.get(n, []) %}
+        <div
+            id="casillero-{{ n }}"
+            data-estacion="{{ n }}"
+            class="casillero aspect-square rounded-lg border-2 border-slate-200 bg-slate-50 flex flex-col items-center justify-center p-1 transition-colors duration-300"
+        >
+            <span class="text-[10px] font-bold text-slate-400">#{{ n }}</span>
+            {% for persona in ocupantes %}
+            <span class="text-[9px] leading-tight text-slate-600 text-center truncate w-full">
+                {{ persona.nombre.split(" ")[0] }}
+            </span>
+            {% endfor %}
+            {% if not ocupantes %}
+            <span class="text-[9px] text-slate-300">vacio</span>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</div>

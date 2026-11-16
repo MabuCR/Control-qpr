@@ -98,6 +98,26 @@ def companeros_de_estacion(estacion: int, excluir_id: int) -> list[sqlite3.Row]:
         conn.close()
 
 
+def obtener_mueble() -> dict[int, list[sqlite3.Row]]:
+    """Devuelve todas las asignaciones agrupadas por estacion, para
+    dibujar el mueble completo (casillero por casillero)."""
+    conn = get_connection()
+    try:
+        filas = conn.execute(
+            """
+            SELECT id, nombre, control, estacion, posicion
+            FROM asignaciones
+            ORDER BY estacion, posicion
+            """
+        ).fetchall()
+        mueble: dict[int, list[sqlite3.Row]] = {}
+        for fila in filas:
+            mueble.setdefault(fila["estacion"], []).append(fila)
+        return mueble
+    finally:
+        conn.close()
+
+
 def total_registros() -> int:
     conn = get_connection()
     try:

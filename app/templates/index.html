@@ -29,11 +29,36 @@
     <p id="ocr-estado" class="text-xs text-slate-400 mt-2"></p>
 </div>
 
+{% include "partials/mueble.html" %}
+
 <div id="resultados">
     <p class="text-slate-400 text-sm text-center mt-8">
         {{ total }} asignaciones cargadas. Escribe algo arriba para buscar.
     </p>
 </div>
+
+<script>
+    const CLASES_RESALTADO = [
+        "ring-4", "ring-yellow-400", "bg-yellow-100", "border-yellow-400", "animate-pulse",
+    ];
+
+    function resaltarEstaciones(estaciones) {
+        document.querySelectorAll(".casillero").forEach((el) => {
+            el.classList.remove(...CLASES_RESALTADO);
+        });
+        let primero = null;
+        estaciones.forEach((n) => {
+            const el = document.getElementById("casillero-" + n);
+            if (el) {
+                el.classList.add(...CLASES_RESALTADO);
+                primero = primero || el;
+            }
+        });
+        if (primero) {
+            primero.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+    }
+</script>
 
 <script src="https://unpkg.com/tesseract.js@5/dist/tesseract.min.js"></script>
 <script>

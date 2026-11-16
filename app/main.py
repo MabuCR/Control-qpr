@@ -10,7 +10,13 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
-from app.db import buscar, companeros_de_estacion, init_db, total_registros
+from app.db import (
+    buscar,
+    companeros_de_estacion,
+    init_db,
+    obtener_mueble,
+    total_registros,
+)
 
 app = FastAPI(title="Control QPR asignados")
 templates = Jinja2Templates(directory="app/templates")
@@ -23,10 +29,16 @@ def on_startup() -> None:
 
 @app.get("/", response_class=HTMLResponse)
 def index(request: Request):
+    mueble = obtener_mueble()
+    total_estaciones = max(mueble.keys()) if mueble else 0
     return templates.TemplateResponse(
         request,
         "index.html",
-        {"total": total_registros()},
+        {
+            "total": total_registros(),
+            "mueble": mueble,
+            "rango_estaciones": range(1, total_estaciones + 1),
+        },
     )
 
 
@@ -38,8 +50,14 @@ def buscar_endpoint(request: Request, q: str = ""):
         companeros = companeros_de_estacion(fila["estacion"], fila["id"])
         resultados.append({"fila": fila, "companeros": companeros})
 
+    estaciones_encontradas = sorted({fila["estacion"] for fila in filas})
+
     return templates.TemplateResponse(
         request,
         "partials/resultados.html",
-        {"q": q, "resultados": resultados},
+        {
+            "q": q,
+            "resultados": resultados,
+            "estaciones_encontradas": estaciones_encontradas,
+        },
     )

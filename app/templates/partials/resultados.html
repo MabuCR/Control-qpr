@@ -1,7 +1,9 @@
 {% if not q %}
 <p class="text-slate-400 text-sm text-center mt-8">Escribe algo arriba para buscar.</p>
+<script>resaltarEstaciones([]);</script>
 {% elif not resultados %}
 <p class="text-slate-400 text-sm text-center mt-8">Sin resultados para "{{ q }}".</p>
+<script>resaltarEstaciones([]);</script>
 {% else %}
 <div class="space-y-3">
     {% for item in resultados %}
@@ -33,4 +35,5 @@
     </div>
     {% endfor %}
 </div>
+<script>resaltarEstaciones([{{ estaciones_encontradas | join(",") }}]);</script>
 {% endif %}
